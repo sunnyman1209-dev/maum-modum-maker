@@ -8,12 +8,20 @@ interface StudentPayload {
   strength: string;
 }
 
+interface GeminiResponse {
+  candidates?: {
+    content?: {
+      parts?: { text?: string }[];
+    };
+  }[];
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return res.status(503).json({ error: 'AI service not configured' });
   }
@@ -41,30 +49,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     '{"groups":[{"members":["이름1","이름2"],"reason":"20자 이내 한국어 배치 이유"}]}';
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 1000,
+            responseMimeType: 'application/json',
+          },
+        }),
       },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }],
-      }),
-    });
+    );
 
     if (!response.ok) {
       return res.status(502).json({ error: 'AI provider error' });
     }
 
-    const json = (await response.json()) as {
-      content?: { type: string; text?: string }[];
-    };
-
-    const text = (json.content ?? [])
-      .map((b) => (b.type === 'text' ? b.text : ''))
+    const json = (await response.json()) as GeminiResponse;
+    const text = (json.candidates?.[0]?.content?.parts ?? [])
+      .map((part) => part.text ?? '')
       .join('')
       .trim()
       .replace(/```json|```/g, '')
