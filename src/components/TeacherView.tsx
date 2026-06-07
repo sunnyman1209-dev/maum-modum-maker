@@ -39,6 +39,11 @@ export function TeacherView() {
   }, []);
 
   const handleEnterPw = () => {
+    const input = pwIn;
+    console.log('입력값:', input);
+    console.log('환경변수:', import.meta.env.VITE_TEACHER_PASSWORD);
+    console.log('비교결과:', input === import.meta.env.VITE_TEACHER_PASSWORD);
+
     if (!TEACHER_PASSWORD) {
       setPwErr('선생님 비밀번호가 설정되지 않았어요. VITE_TEACHER_PASSWORD 환경변수를 확인해 주세요.');
       return;
