@@ -21,12 +21,17 @@ npm run dev
 
 https://github.com/sunnyman1209-dev/maum-modum-maker
 
-## Vercel 배포 (권장: GitHub Import)
+## Vercel 배포 (운영)
 
-1. [Vercel Import 링크](https://vercel.com/new/import?s=https://github.com/sunnyman1209-dev/maum-modum-maker) 열기
-2. GitHub 연동 후 `maum-modum-maker` 저장소 Import
-3. Framework Preset: **Vite** (자동 감지)
-4. 아래 환경 변수 추가 후 Deploy
+**사이트:** https://maum-modum-maker.vercel.app  
+**접속 비밀번호:** `znznzn` (앱 코드에서만 검사)
+
+재배포 (Windows 한글 사용자명 CLI 오류 우회):
+
+```powershell
+$env:NODE_OPTIONS="--require $PWD\scripts\vercel-preload.cjs"
+npx vercel --prod --yes
+```
 
 ### 환경 변수 (Vercel Project Settings)
 

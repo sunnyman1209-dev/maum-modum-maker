@@ -12,5 +12,8 @@ $env:VITE_SUPABASE_URL = "https://zikzohexsqnscfzvvzxt.supabase.co"
 $env:VITE_SUPABASE_ANON_KEY = "sb_publishable_raVj68nvxg_qeTSTsiMkKw_G1DZR0E_"
 $env:VITE_SITE_PASSWORD = "znznzn"
 
-Set-Location $PSScriptRoot + "\.."
-npx vercel deploy --prod --yes --token $env:VERCEL_TOKEN
+$preload = Join-Path $PSScriptRoot "vercel-preload.cjs"
+$env:NODE_OPTIONS = "--require $preload"
+
+Set-Location (Join-Path $PSScriptRoot "..")
+npx vercel deploy --prod --yes @args
