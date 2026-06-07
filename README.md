@@ -17,12 +17,16 @@ cp .env.example .env.local   # 값 채우기
 npm run dev
 ```
 
-## Vercel 배포
+## GitHub
 
-```bash
-npx vercel login
-npx vercel --prod
-```
+https://github.com/sunnyman1209-dev/maum-modum-maker
+
+## Vercel 배포 (권장: GitHub Import)
+
+1. [Vercel Import 링크](https://vercel.com/new/import?s=https://github.com/sunnyman1209-dev/maum-modum-maker) 열기
+2. GitHub 연동 후 `maum-modum-maker` 저장소 Import
+3. Framework Preset: **Vite** (자동 감지)
+4. 아래 환경 변수 추가 후 Deploy
 
 ### 환경 변수 (Vercel Project Settings)
 
@@ -30,8 +34,10 @@ npx vercel --prod
 |------|------|
 | `VITE_SUPABASE_URL` | Supabase Project URL |
 | `VITE_SUPABASE_ANON_KEY` | Supabase anon public key |
-| `VITE_SITE_PASSWORD` | 앱 접속 비밀번호 (`znznzn`) |
+| `VITE_SITE_PASSWORD` | `znznzn` |
 | `ANTHROPIC_API_KEY` | AI 모둠 편성 (선택) |
+
+접속 비밀번호는 **앱 코드(`SiteGate`)에서만** 검사합니다. Netlify 임시 비밀번호는 사용하지 않습니다.
 
 ## Supabase 설정
 
