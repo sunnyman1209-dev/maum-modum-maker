@@ -1,6 +1,5 @@
 import { useState } from 'react';
-
-const SITE_PASSWORD = import.meta.env.VITE_SITE_PASSWORD as string | undefined;
+import { SITE_PASSWORD } from '../lib/env';
 const UNLOCK_KEY = 'maum-modum-unlocked';
 
 function isUnlocked(): boolean {
@@ -20,7 +19,7 @@ export function SiteGate({ children }: SiteGateProps) {
   if (!SITE_PASSWORD || unlocked) return <>{children}</>;
 
   const handleEnter = () => {
-    if (pw === SITE_PASSWORD) {
+    if (pw.trim() === SITE_PASSWORD) {
       sessionStorage.setItem(UNLOCK_KEY, '1');
       setUnlocked(true);
       setErr('');

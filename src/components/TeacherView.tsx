@@ -3,9 +3,8 @@ import { STRENGTHS } from '../constants';
 import { aiBuild, localBuild } from '../lib/grouping';
 import { storeClear, storeList } from '../lib/store';
 import type { Group, LockView, StrMode, StudentSubmission } from '../types';
+import { TEACHER_PASSWORD } from '../lib/env';
 import { GroupResults } from './Pickers';
-
-const TEACHER_PASSWORD = import.meta.env.VITE_TEACHER_PASSWORD as string | undefined;
 
 export function TeacherView() {
   const [lockView, setLockView] = useState<LockView>('enter');
@@ -41,10 +40,10 @@ export function TeacherView() {
 
   const handleEnterPw = () => {
     if (!TEACHER_PASSWORD) {
-      setPwErr('선생님 비밀번호가 설정되지 않았어요.');
+      setPwErr('선생님 비밀번호가 설정되지 않았어요. VITE_TEACHER_PASSWORD 환경변수를 확인해 주세요.');
       return;
     }
-    if (pwIn === TEACHER_PASSWORD) {
+    if (pwIn.trim() === TEACHER_PASSWORD) {
       setLockView('panel');
       setPwErr('');
       loadSubs();

@@ -11,6 +11,7 @@ if (-not $env:VERCEL_TOKEN) {
 $env:VITE_SUPABASE_URL = "https://zikzohexsqnscfzvvzxt.supabase.co"
 $env:VITE_SUPABASE_ANON_KEY = "sb_publishable_raVj68nvxg_qeTSTsiMkKw_G1DZR0E_"
 $env:VITE_SITE_PASSWORD = "1111"
+$env:VITE_TEACHER_PASSWORD = "1234"
 
 $preload = Join-Path $PSScriptRoot "vercel-preload.cjs"
 $env:NODE_OPTIONS = "--require $preload"

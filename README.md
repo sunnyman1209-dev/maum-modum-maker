@@ -40,7 +40,7 @@ npx vercel --prod --yes
 | `VITE_SUPABASE_URL` | Supabase Project URL |
 | `VITE_SUPABASE_ANON_KEY` | Supabase anon public key |
 | `VITE_SITE_PASSWORD` | 학생 접속 비밀번호 (`1111`) |
-| `VITE_TEACHER_PASSWORD` | 선생님 편성 탭 비밀번호 |
+| `VITE_TEACHER_PASSWORD` | 선생님 편성 탭 비밀번호 (`1234`) |
 | `GEMINI_API_KEY` | AI 모둠 편성 — Gemini 2.0 Flash (선택) |
 
 접속 비밀번호는 **앱 코드(`SiteGate`)에서만** 검사합니다. Netlify 임시 비밀번호는 사용하지 않습니다.
