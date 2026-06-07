@@ -24,7 +24,7 @@ const result = spawnSync(
       ...process.env,
       VITE_SUPABASE_URL: process.env.VITE_SUPABASE_URL ?? 'https://zikzohexsqnscfzvvzxt.supabase.co',
       VITE_SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY ?? 'sb_publishable_raVj68nvxg_qeTSTsiMkKw_G1DZR0E_',
-      VITE_SITE_PASSWORD: process.env.VITE_SITE_PASSWORD ?? 'znznzn',
+      VITE_SITE_PASSWORD: process.env.VITE_SITE_PASSWORD ?? '1111',
     },
     shell: true,
   },
