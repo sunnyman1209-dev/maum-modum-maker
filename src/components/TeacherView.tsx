@@ -1,13 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { STRENGTHS } from '../constants';
 import { aiBuild, localBuild } from '../lib/grouping';
-import { storeClear, storeGet, storeList, storeSet } from '../lib/store';
+import { storeClear, storeList } from '../lib/store';
 import type { Group, LockView, StrMode, StudentSubmission } from '../types';
 import { GroupResults } from './Pickers';
 
+const TEACHER_PASSWORD = import.meta.env.VITE_TEACHER_PASSWORD as string | undefined;
+
 export function TeacherView() {
   const [lockView, setLockView] = useState<LockView>('enter');
-  const [pwNew, setPwNew] = useState('');
   const [pwIn, setPwIn] = useState('');
   const [pwErr, setPwErr] = useState('');
   const [subs, setSubs] = useState<StudentSubmission[]>([]);
@@ -38,57 +39,18 @@ export function TeacherView() {
     }
   }, []);
 
-  const openTeacher = useCallback(async () => {
-    try {
-      const pw = await storeGet('cfg:tpw');
-      if (!pw) {
-        setLockView('set');
-        setPwNew('');
-      } else {
-        setLockView('enter');
-        setPwIn('');
-        setPwErr('');
-      }
-    } catch {
-      setLockView('enter');
-      setPwErr('Supabase 연결을 확인해 주세요.');
-    }
-  }, []);
-
-  useEffect(() => {
-    openTeacher();
-  }, [openTeacher]);
-
-  const handleSetPw = async () => {
-    if (pwNew.trim().length < 2) {
-      alert('비밀번호를 2자 이상 입력해 주세요.');
+  const handleEnterPw = () => {
+    if (!TEACHER_PASSWORD) {
+      setPwErr('선생님 비밀번호가 설정되지 않았어요.');
       return;
     }
-    await storeSet('cfg:tpw', pwNew.trim());
-    setLockView('panel');
-    loadSubs();
-  };
-
-  const handleEnterPw = async () => {
-    const pw = await storeGet('cfg:tpw');
-    if (pwIn === pw) {
+    if (pwIn === TEACHER_PASSWORD) {
       setLockView('panel');
+      setPwErr('');
       loadSubs();
     } else {
       setPwErr('비밀번호가 맞지 않아요.');
     }
-  };
-
-  const handleChangePw = async () => {
-    const np = prompt('새 비밀번호를 입력하세요 (2자 이상)');
-    if (np === null) return;
-    const trimmed = np.trim();
-    if (trimmed.length < 2) {
-      alert('2자 이상이어야 해요.');
-      return;
-    }
-    await storeSet('cfg:tpw', trimmed);
-    alert('비밀번호를 바꿨어요.');
   };
 
   const handleClear = async () => {
@@ -157,33 +119,6 @@ export function TeacherView() {
       </div>
     );
   };
-
-  if (lockView === 'set') {
-    return (
-      <section id="teacherView">
-        <div className="card">
-          <div className="lock">
-            <div className="big">🔐</div>
-            <h2>편성 비밀번호 만들기</h2>
-            <p>학생이 편성 결과를 보거나 바꾸지 못하게, 선생님만 아는 비밀번호를 정해 주세요.</p>
-            <input
-              type="password"
-              value={pwNew}
-              onChange={(e) => setPwNew(e.target.value)}
-              placeholder="비밀번호 입력"
-              autoComplete="new-password"
-            />
-            <button className="btn" type="button" onClick={handleSetPw} style={{ maxWidth: 260, margin: '0 auto' }}>
-              설정하고 입장
-            </button>
-            <p className="note">
-              학생들에게 앱을 나눠주기 <b>전에</b> 먼저 설정하는 걸 권해요.
-            </p>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   if (lockView === 'enter') {
     return (
@@ -278,10 +213,6 @@ export function TeacherView() {
         </div>
 
         <div style={{ marginTop: 18, textAlign: 'center' }}>
-          <button className="small-link" type="button" onClick={handleChangePw}>
-            비밀번호 변경
-          </button>
-          <span style={{ color: 'var(--line)' }}> | </span>
           <button className="small-link" type="button" onClick={handleClear} style={{ color: 'var(--coral)' }}>
             제출 데이터 전체 초기화
           </button>

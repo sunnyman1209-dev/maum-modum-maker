@@ -25,4 +25,4 @@ export type MbtiDim = 'ei' | 'ns' | 'tf' | 'jp';
 export type MbtiPick = Record<MbtiDim, 'E' | 'I' | 'N' | 'S' | 'T' | 'F' | 'J' | 'P' | null>;
 export type StrMode = 'spread' | 'ignore';
 export type TabId = 'student' | 'teacher';
-export type LockView = 'set' | 'enter' | 'panel';
+export type LockView = 'enter' | 'panel';
